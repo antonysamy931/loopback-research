@@ -1,0 +1,31 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongodb": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "customuser",
+    "password": "",
+    "name": "mongodb",
+    "user": "",
+    "connector": "mongodb"
+  },
+  "EmailConnector": {
+    "name": "EmailConnector",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "smtp",
+        "host": "secure200.inmotionhosting.com",
+        "secure": false,
+        "port": 587,
+        "tls": {
+          "rejectUnauthorized": false
+        }
+      }
+    ]
+  }
+}
