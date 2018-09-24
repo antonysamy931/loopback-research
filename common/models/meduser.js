@@ -52,4 +52,18 @@ module.exports = function(Meduser) {
         next();
        
     });
+
+    Meduser.beforeRemote('login', (ctx, userInstance, next) => {
+        console.log('login before');
+        console.log(ctx.req.body);
+        ctx.req.body.ttl=30;
+        next();
+    });
+
+   Meduser.afterRemote('login', (ctx, userInstance, next) => {
+        console.log('login after');
+        userInstance.Role = "admin";
+        console.log(userInstance);
+        next();
+    });
 };

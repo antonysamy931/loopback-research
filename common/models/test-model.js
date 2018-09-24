@@ -24,5 +24,23 @@ module.exports = function(Testmodel) {
     Testmodel.remoteMethod('users',{       
         http: {path: '/users', verb: 'get'},
         returns: {arg: 'users', type: 'Object'}
-    });    
+    });  
+
+    var modelValue;
+    
+    Testmodel.observe('before save', (ctx, next) => {
+        modelValue = ctx.instance.test;
+        ctx.instance.unsetAttribute("test");
+        next();
+    });
+
+    Testmodel.observe('after save', (ctx, next) => {
+        console.log(modelValue);
+        next();
+    });
+
+    Testmodel.afterRemote('create', function(context, modelinstance, next){
+        console.log(modelinstance);
+        next();
+    });
 };
