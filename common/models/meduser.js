@@ -3,16 +3,48 @@ var app = require('../../server/server');
 
 module.exports = function(Meduser) {    
     app.model(Meduser);    
+
+    
+    /*Meduser.disableRemoteMethod('upsert', true);				
+    Meduser.disableRemoteMethod('deleteById', true);			
+    Meduser.disableRemoteMethod("updateAll", true);				
+    Meduser.disableRemoteMethod("updateAttributes", true);		
+    Meduser.disableRemoteMethod("find", true);
+    Meduser.disableRemoteMethod("findById", true);
+    Meduser.disableRemoteMethod("findOne", true);
+
+    Meduser.disableRemoteMethod("deleteById", true);
+
+    Meduser.disableRemoteMethod("confirm", true);
+    Meduser.disableRemoteMethod("count", true);
+    Meduser.disableRemoteMethod("exists", true);
+    Meduser.disableRemoteMethod("resetPassword", true);*/
+
+    Meduser.disableRemoteMethod('__count__accessTokens', false);
+    Meduser.disableRemoteMethod('__create__accessTokens', false);
+    Meduser.disableRemoteMethod('__delete__accessTokens', false);
+    Meduser.disableRemoteMethod('__destroyById__accessTokens', false);
+    Meduser.disableRemoteMethod('__findById__accessTokens', false);
+    Meduser.disableRemoteMethod('__get__accessTokens', false);
+    Meduser.disableRemoteMethod('__updateById__accessTokens', false);
+    
+    /*Meduser.disableRemoteMethod('createChangeStream', true);
+    Meduser.disableRemoteMethod("count", true);
+    Meduser.disableRemoteMethod("exists", true);*/
+
+    /*Meduser.disableRemoteMethod('login',true);*/
+    /*Meduser.disableRemoteMethod('upsertWithWhere',true);*/
+
     Meduser.afterRemote('create', function(context, userInstance, next) {
         console.log('> user.afterRemote triggered');
                 
-        var link = `<a href="http://localhost:3000/api/medusers/${userInstance.id}/verify">Verify</a>`;
+        var link = `https://www.google.co.in/${userInstance.id}`;
         var options = {
           type: 'email',
           to: 'antony.samy@ravsoftsolutions.com',//userInstance.email,
           from: 'DoNotReply_Local@Merge.com',
           subject: 'Thanks for registering.',
-          html: link,          
+          verifyHref: link,          
           user: Meduser,
           redirect: '/verified'
         };
@@ -66,4 +98,44 @@ module.exports = function(Meduser) {
         console.log(userInstance);
         next();
     });
+    var user = app.models.User;
+
+    Meduser.Account_Login = (cb) => {
+        Meduser.login({username:"test@gm.com",password:"Pa$$word"}, function(err, token){
+            console.log(err);
+        });
+    }
+
+    Meduser.remoteMethod('Account_Login', {
+		'http': {
+			'path': '/add_to_login',
+			'verb': 'post'
+		},
+		'accepts': [
+			{
+				'arg': 'credentials',
+				'type': 'object',
+				'description': 'Login credentials',
+				'required': true,
+				'http': {
+					'source': 'body'
+				}
+			},
+			{
+				'arg': 'include',
+				'type': 'string',
+				'description': 'Related objects to include in the response. See the description of return value for more details.',
+				'http': {
+					'source': 'query'
+				}
+			}
+		],
+		'returns': [
+			{
+				'arg': 'token',
+				'type': 'object',
+				'root': true
+			}
+		]
+	})
 };
