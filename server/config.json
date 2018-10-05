@@ -18,5 +18,6 @@
       "limit": "100kb"
     },
     "cors": false
-  }
+  },
+  "mailurl":"http://localhost:8085"
 }

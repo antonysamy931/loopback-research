@@ -24,6 +24,16 @@ module.exports = function(app){
         });
     });
 
+    /*Role.findOne({where: {name:'admin'}}, function(error, role) {
+        role.principals.create({
+            principalType: RoleMapping.USER,
+            principalId: "5bb743bf91944147c401e0e1"
+          }, function(err, principal) {
+            if (err) return debug(err);
+            //debug(principal);
+          });
+    });*/
+
     function test(){
         Role.findOne({where:{name:"pharmaadmin"}}, (err, role) => {
             if(!role){

@@ -1,5 +1,8 @@
 'use strict';
 var app = require('../../server/server');
+var path = require('path');
+
+var config = require(path.join(__dirname, '../../server/config.json'));
 
 module.exports = function(Meduser) {    
     app.model(Meduser);    
@@ -35,10 +38,12 @@ module.exports = function(Meduser) {
     /*Meduser.disableRemoteMethod('login',true);*/
     /*Meduser.disableRemoteMethod('upsertWithWhere',true);*/
 
+    
+
     Meduser.afterRemote('create', function(context, userInstance, next) {
         console.log('> user.afterRemote triggered');
-                
-        var link = `https://www.google.co.in/${userInstance.id}`;
+        console.log(config['mailurl']);            
+        var link = `${config['mailurl']}/${userInstance.id}`;
         var options = {
           type: 'email',
           to: 'antony.samy@ravsoftsolutions.com',//userInstance.email,
@@ -46,7 +51,8 @@ module.exports = function(Meduser) {
           subject: 'Thanks for registering.',
           verifyHref: link,          
           user: Meduser,
-          redirect: '/verified'
+          //template: path.join(__dirname, './index.ejs'),
+          //redirect: '/verified'
         };
 
         userInstance.verify(options, function(err, response, next) {

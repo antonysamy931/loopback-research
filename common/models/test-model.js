@@ -28,19 +28,38 @@ module.exports = function(Testmodel) {
 
     var modelValue;
     
-    Testmodel.observe('before save', (ctx, next) => {
+    /*Testmodel.observe('before save', (ctx, next) => {
+        console.log("before save");
         modelValue = ctx.instance.test;
         ctx.instance.unsetAttribute("test");
         next();
     });
 
     Testmodel.observe('after save', (ctx, next) => {
+        console.log("after save");
+        console.log(modelValue);
+        next();
+    });*/
+
+    Testmodel.afterRemote('create', function(context, modelinstance, next){
+        console.log("after remote");
+        console.log(modelinstance);
         console.log(modelValue);
         next();
     });
 
-    Testmodel.afterRemote('create', function(context, modelinstance, next){
-        console.log(modelinstance);
+    Testmodel.beforeCreate = function(next, modelInstance) {
+        //your logic goes here
+        console.log('beforecreate')
+        modelValue = modelInstance.test;
+        modelInstance.unsetAttribute("test");
         next();
-    });
+    };
+
+    Testmodel.afterCreate = function(next) {
+        //your logic goes here
+        console.log('aftercreate')
+        console.log(modelValue)
+        next();
+    };
 };
